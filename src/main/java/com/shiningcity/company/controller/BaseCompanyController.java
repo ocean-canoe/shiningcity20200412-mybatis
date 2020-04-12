@@ -200,9 +200,9 @@ public class BaseCompanyController {
 	        @AssertTrue Boolean pass,
 	        @AssertFalse Boolean word
 	        ) {
-	    
+	    // 这是我写的，我想折磨写
 	    // TODO 校验完以后怎么办？？？
-	    
+	    // 上边依据要留下，
         return "";
 	}
 
