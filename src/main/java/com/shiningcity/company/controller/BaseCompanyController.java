@@ -200,9 +200,9 @@ public class BaseCompanyController {
 	        @AssertTrue Boolean pass,
 	        @AssertFalse Boolean word
 	        ) {
-	    
-	    // TODO 校验完以后怎么办？？？
-	    
+	    // 未完待续
+		// 在这里我要做一个测试
+		// 敬请期待
         return "";
 	}
 
