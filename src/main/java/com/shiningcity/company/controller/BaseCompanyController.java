@@ -226,7 +226,7 @@ public class BaseCompanyController {
 		model.addAttribute("value", value);
 		return "/company/indexTest";
 	}
-	
+	// 添加注释
 	@ResponseBody
 	@RequestMapping(value="/indexTest2")//,method=RequestMethod.POST
 	public List<Map<String, Object>> indexTest2(@PathVariable("urlParam")Integer urlParam,Integer value ,ModelMap model){
