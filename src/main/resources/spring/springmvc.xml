@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+	
+	<!-- 加载java配置文件 -->
+	<!-- <context:property-placeholder location="classpath:commondata.properties"/> -->
+	<context:property-placeholder location="classpath:common.properties"/>
+	
+	<!-- 扫描controller的bean包 -->
+    <!-- 将controller包下的接口加入SpringMVC中 -->
+	<context:component-scan base-package="com.shiningcity.*.controller" />
+	
+	<!-- 配置基于注解的处理器映射器和处理器适配器（DefaultAnnotationHandlerMapping、AnnotationMethodHandlerAdapter） -->
+	<!-- 会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean,是spring MVC为@Controllers分发请求所必须的。 -->
+	<!-- 后面，我们处理响应ajax请求时，就使用到了对json的支持。
+		后面，对action写JUnit单元测试时，要从spring IOC容器中取DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter 两个bean，来完成测试，取的时候要知道是<mvc:annotation-driven />这一句注册的这两个bean。 -->
+	<!-- <mvc:annotation-driven /> -->
+	<mvc:annotation-driven >
+		<!-- Responsebody相关 -->
+		<mvc:message-converters register-defaults="true">  
+			
+			<!-- 将responsebody返回的对象转换成json（空属性显示null）spring3:MappingJacksonHttpMessageConverter；spring4：MappingJackson2HttpMessageConverter   -->
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+			
+			<!-- 解决@ResponseBody中文乱码（全局有效） 并且需要在Maven依赖中配置上Jackjson的依赖。  -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter"> 
+				<!-- <property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />   -->
+				<property name="supportedMediaTypes">  
+                    <list>  
+                        <value>text/plain;charset=utf-8</value>  
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>  
+                </property>  
+			</bean>
+			<!-- 或者在requestmapping中加上 produces = "application/json;charset=utf-8" 属性，但这个值对单个方法有效 -->
+            
+		</mvc:message-converters>  
+	</mvc:annotation-driven>  
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 配置视图的前缀 -->
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<!-- 配置视图的后缀 -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 拦截器 -->
+	<!-- <mvc:interceptors> 
+		多个拦截器，顺序执行
+		<mvc:interceptor> 
+			<mvc:mapping path="/**"/> 
+			<bean class="com.shiningcity.common.interceptor.LoginInterceptor"></bean> 
+		</mvc:interceptor> 
+	</mvc:interceptors>  -->
+	
+	<!-- 配置文件上传 -->  
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+		    <property name="maxUploadSize">  
+		        <!-- 最大上传大小：100M -->  
+		        <value>104857600</value>  
+		    </property> 
+		</bean>  
+	
+	<!-- 配置静态资源 -->
+	<!-- <mvc:default-servlet-handler/> -->
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/image/" mapping="/image/**"/>
+	<mvc:resources location="/images/" mapping="/images/**"/>
+	<mvc:resources location="/products/" mapping="/products/**"/>
+</beans>
+	

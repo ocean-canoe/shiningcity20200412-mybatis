@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+
+	<!-- Map all requests to the DispatcherServlet for handling -->
+	<!-- <servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>url</url-pattern>
+	</servlet-mapping> -->
+  
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <!-- 前端控制器  DispatcherServlet -->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring/springmvc.xml</param-value><!-- 使用tomcat7插件的话使用classpath。使用tomcat8插件时要用classpath*， 否则无法加载xml配置文件，但是classpath*用classpath*需要遍历所有的classpath，会降低加载速度。 -->
+    </init-param>
+    <!-- servlet3.0以后支持异步请求 -->
+    <async-supported>true</async-supported>
+  </servlet>
+  <!-- 全局加载配置文件 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/applicationContext-*.xml</param-value><!-- 使用tomcat7插件的话使用classpath。使用tomcat8插件时要用classpath*， 否则无法加载xml配置文件，但是classpath*用classpath*需要遍历所有的classpath，会降低加载速度。 -->
+  </context-param>		<!-- ,classpath*:spring/dubbo-*.xml -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <!-- *.do：模型视图风格 -->
+    <!-- /：restfull风格 -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <!-- 支持异步处理 -->
+    <async-supported>true</async-supported>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+</web-app>

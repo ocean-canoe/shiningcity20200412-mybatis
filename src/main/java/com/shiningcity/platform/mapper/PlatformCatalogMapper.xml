@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiningcity.platform.mapper.PlatformCatalogMapper">
+  <resultMap id="BaseResultMap" type="com.shiningcity.platform.pojo.PlatformCatalog">
+    <id column="CATALOG_CODE" jdbcType="INTEGER" property="catalogCode" />
+    <result column="CATALOG_NAME" jdbcType="VARCHAR" property="catalogName" />
+    <result column="PARENT_CATALOG_CODE" jdbcType="INTEGER" property="parentCatalogCode" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="CATALOG_PAHT" jdbcType="VARCHAR" property="catalogPaht" />
+    <result column="SHOW_STATUS" jdbcType="INTEGER" property="showStatus" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    CATALOG_CODE, CATALOG_NAME, PARENT_CATALOG_CODE, SORT, CATALOG_PAHT, SHOW_STATUS, 
+    REMARK
+  </sql>
+  <select id="selectByExample" parameterType="com.shiningcity.platform.pojo.PlatformCatalogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_platform_catalog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_platform_catalog
+    where CATALOG_CODE = #{catalogCode,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_platform_catalog
+    where CATALOG_CODE = #{catalogCode,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.shiningcity.platform.pojo.PlatformCatalogExample">
+    delete from tb_platform_catalog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.shiningcity.platform.pojo.PlatformCatalog">
+    <selectKey keyProperty="pkid" order="AFTER" resultType="java.lang.Integer">
+        select LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_platform_catalog (CATALOG_CODE, CATALOG_NAME, PARENT_CATALOG_CODE, 
+      SORT, CATALOG_PAHT, SHOW_STATUS, 
+      REMARK)
+    values (#{catalogCode,jdbcType=INTEGER}, #{catalogName,jdbcType=VARCHAR}, #{parentCatalogCode,jdbcType=INTEGER}, 
+      #{sort,jdbcType=INTEGER}, #{catalogPaht,jdbcType=VARCHAR}, #{showStatus,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shiningcity.platform.pojo.PlatformCatalog">
+    <selectKey keyProperty="pkid" order="AFTER" resultType="java.lang.Integer">
+        select LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_platform_catalog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="catalogCode != null">
+        CATALOG_CODE,
+      </if>
+      <if test="catalogName != null">
+        CATALOG_NAME,
+      </if>
+      <if test="parentCatalogCode != null">
+        PARENT_CATALOG_CODE,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="catalogPaht != null">
+        CATALOG_PAHT,
+      </if>
+      <if test="showStatus != null">
+        SHOW_STATUS,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="catalogCode != null">
+        #{catalogCode,jdbcType=INTEGER},
+      </if>
+      <if test="catalogName != null">
+        #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCatalogCode != null">
+        #{parentCatalogCode,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="catalogPaht != null">
+        #{catalogPaht,jdbcType=VARCHAR},
+      </if>
+      <if test="showStatus != null">
+        #{showStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.shiningcity.platform.pojo.PlatformCatalogExample" resultType="java.lang.Long">
+    select count(*) from tb_platform_catalog
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_platform_catalog
+    <set>
+      <if test="record.catalogCode != null">
+        CATALOG_CODE = #{record.catalogCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.catalogName != null">
+        CATALOG_NAME = #{record.catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentCatalogCode != null">
+        PARENT_CATALOG_CODE = #{record.parentCatalogCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        SORT = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.catalogPaht != null">
+        CATALOG_PAHT = #{record.catalogPaht,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showStatus != null">
+        SHOW_STATUS = #{record.showStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_platform_catalog
+    set CATALOG_CODE = #{record.catalogCode,jdbcType=INTEGER},
+      CATALOG_NAME = #{record.catalogName,jdbcType=VARCHAR},
+      PARENT_CATALOG_CODE = #{record.parentCatalogCode,jdbcType=INTEGER},
+      SORT = #{record.sort,jdbcType=INTEGER},
+      CATALOG_PAHT = #{record.catalogPaht,jdbcType=VARCHAR},
+      SHOW_STATUS = #{record.showStatus,jdbcType=INTEGER},
+      REMARK = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shiningcity.platform.pojo.PlatformCatalog">
+    update tb_platform_catalog
+    <set>
+      <if test="catalogName != null">
+        CATALOG_NAME = #{catalogName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCatalogCode != null">
+        PARENT_CATALOG_CODE = #{parentCatalogCode,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        SORT = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="catalogPaht != null">
+        CATALOG_PAHT = #{catalogPaht,jdbcType=VARCHAR},
+      </if>
+      <if test="showStatus != null">
+        SHOW_STATUS = #{showStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CATALOG_CODE = #{catalogCode,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shiningcity.platform.pojo.PlatformCatalog">
+    update tb_platform_catalog
+    set CATALOG_NAME = #{catalogName,jdbcType=VARCHAR},
+      PARENT_CATALOG_CODE = #{parentCatalogCode,jdbcType=INTEGER},
+      SORT = #{sort,jdbcType=INTEGER},
+      CATALOG_PAHT = #{catalogPaht,jdbcType=VARCHAR},
+      SHOW_STATUS = #{showStatus,jdbcType=INTEGER},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where CATALOG_CODE = #{catalogCode,jdbcType=INTEGER}
+  </update>
+</mapper>

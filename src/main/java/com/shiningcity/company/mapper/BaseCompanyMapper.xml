@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiningcity.company.mapper.BaseCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.shiningcity.company.pojo.BaseCompany">
+    <id column="PKID" jdbcType="INTEGER" property="pkid" />
+    <result column="COMPANY_CODE" jdbcType="VARCHAR" property="companyCode" />
+    <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+    <result column="COMPANY_ADDRESS" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="FIRST_MANAGER_NAME" jdbcType="VARCHAR" property="firstManagerName" />
+    <result column="CERTIFICATE_CODE" jdbcType="VARCHAR" property="certificateCode" />
+    <result column="FIRST_MANAGER_TELEPHONE" jdbcType="VARCHAR" property="firstManagerTelephone" />
+    <result column="GROUP_CODE" jdbcType="VARCHAR" property="groupCode" />
+    <result column="REGION_CODE" jdbcType="VARCHAR" property="regionCode" />
+  </resultMap>
+  <resultMap id="CompanyAndGroupAndManager" type="com.shiningcity.company.pojo.BaseCompany">
+    <id column="PKID" jdbcType="INTEGER" property="pkid" />
+    <result column="COMPANY_CODE" jdbcType="VARCHAR" property="companyCode" />
+    <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+    <result column="COMPANY_ADDRESS" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="FIRST_MANAGER_NAME" jdbcType="VARCHAR" property="firstManagerName" />
+    <result column="CERTIFICATE_CODE" jdbcType="VARCHAR" property="certificateCode" />
+    <result column="FIRST_MANAGER_TELEPHONE" jdbcType="VARCHAR" property="firstManagerTelephone" />
+    <result column="GROUP_CODE" jdbcType="VARCHAR" property="groupCode" />
+    <result column="REGION_CODE" jdbcType="VARCHAR" property="regionCode" />
+    	<!-- 1对1 -->
+    	<association property="group" javaType="com.shiningcity.company.pojo.BaseGroup">
+    		<id column="GROUP_PKID" jdbcType="INTEGER" property="pkid" />
+    		<result column="GROUP_NAME" jdbcType="VARCHAR" property="groupName" />
+    	</association>
+    	<!-- 1对1 -->
+    	<association property="region" javaType="com.shiningcity.company.pojo.BaseRegion">
+    		<id column="REGION_PKID" jdbcType="INTEGER" property="pkid" />
+		    <result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+    	</association>
+    	<!-- 1对多 -->
+    	<collection property="managerList" ofType="com.shiningcity.company.pojo.BaseManager">
+    		<id column="MANAGER_PKID" jdbcType="INTEGER" property="pkid" />
+		    <result column="MANAGER_CODE" jdbcType="VARCHAR" property="managerCode" />
+		    <result column="MANAGER_NAME" jdbcType="VARCHAR" property="managerName" />
+		    <result column="SEX" jdbcType="INTEGER" property="sex" />
+		    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+		    <result column="ID_CARD_CODE" jdbcType="VARCHAR" property="idCardCode" />
+		    <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
+		    <result column="POST" jdbcType="VARCHAR" property="post" />
+		    <result column="IS_FIRST_MANAGER" jdbcType="INTEGER" property="isFirstManager" />
+    	</collection>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PKID, COMPANY_CODE, COMPANY_NAME, COMPANY_ADDRESS, FIRST_MANAGER_NAME, CERTIFICATE_CODE, 
+    FIRST_MANAGER_TELEPHONE, GROUP_CODE, REGION_CODE
+  </sql>
+  <select id="selectByExample" parameterType="com.shiningcity.company.pojo.BaseCompanyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_base_company
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_base_company
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_base_company
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.shiningcity.company.pojo.BaseCompanyExample">
+    delete from tb_base_company
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.shiningcity.company.pojo.BaseCompany">
+    <selectKey keyProperty="pkid" order="AFTER" resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_base_company (PKID, COMPANY_CODE, COMPANY_NAME, 
+      COMPANY_ADDRESS, FIRST_MANAGER_NAME, CERTIFICATE_CODE, 
+      FIRST_MANAGER_TELEPHONE, GROUP_CODE, REGION_CODE
+      )
+    values (#{pkid,jdbcType=INTEGER}, #{companyCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{companyAddress,jdbcType=VARCHAR}, #{firstManagerName,jdbcType=VARCHAR}, #{certificateCode,jdbcType=VARCHAR}, 
+      #{firstManagerTelephone,jdbcType=VARCHAR}, #{groupCode,jdbcType=VARCHAR}, #{regionCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <!-- 批量添加 -->
+  <!-- 注意：如果希望添加数据以后返回主键，必须设置参数usegeneratedKeys="true" keyProperty="pkid"，
+        并且foreach标签中，collection="list"，必须要使用"list"这四个字母，不能使用"comList"等自定义名称。 -->
+  <!-- foreach标签详解：collection：集合参数名，item：遍历时使用的元素名，index：遍历时的索引
+  open：总循环体的前缀，close：总循环体的后缀，separator：循环单体的间隔符 -->
+  <insert id="insertMore" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="pkid">
+insert into tb_base_company (<include refid="Base_Column_List" ></include>) values 
+    <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+(#{item.pkid,jdbcType=INTEGER}, #{item.companyCode,jdbcType=VARCHAR}, #{item.companyName,jdbcType=VARCHAR}, 
+#{item.companyAddress,jdbcType=VARCHAR}, #{item.firstManagerName,jdbcType=VARCHAR}, #{item.certificateCode,jdbcType=VARCHAR}, 
+#{item.firstManagerTelephone,jdbcType=VARCHAR}, #{item.groupCode,jdbcType=VARCHAR}, #{item.regionCode,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.shiningcity.company.pojo.BaseCompany">
+    <selectKey keyProperty="pkid" order="AFTER" resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_base_company
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pkid != null">
+        PKID,
+      </if>
+      <if test="companyCode != null">
+        COMPANY_CODE,
+      </if>
+      <if test="companyName != null">
+        COMPANY_NAME,
+      </if>
+      <if test="companyAddress != null">
+        COMPANY_ADDRESS,
+      </if>
+      <if test="firstManagerName != null">
+        FIRST_MANAGER_NAME,
+      </if>
+      <if test="certificateCode != null">
+        CERTIFICATE_CODE,
+      </if>
+      <if test="firstManagerTelephone != null">
+        FIRST_MANAGER_TELEPHONE,
+      </if>
+      <if test="groupCode != null">
+        GROUP_CODE,
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pkid != null">
+        #{pkid,jdbcType=INTEGER},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="firstManagerName != null">
+        #{firstManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateCode != null">
+        #{certificateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstManagerTelephone != null">
+        #{firstManagerTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCode != null">
+        #{groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.shiningcity.company.pojo.BaseCompanyExample" resultType="java.lang.Long">
+    select count(*) from tb_base_company
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_base_company
+    <set>
+      <if test="record.pkid != null">
+        PKID = #{record.pkid,jdbcType=INTEGER},
+      </if>
+      <if test="record.companyCode != null">
+        COMPANY_CODE = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        COMPANY_NAME = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyAddress != null">
+        COMPANY_ADDRESS = #{record.companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstManagerName != null">
+        FIRST_MANAGER_NAME = #{record.firstManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificateCode != null">
+        CERTIFICATE_CODE = #{record.certificateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstManagerTelephone != null">
+        FIRST_MANAGER_TELEPHONE = #{record.firstManagerTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupCode != null">
+        GROUP_CODE = #{record.groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionCode != null">
+        REGION_CODE = #{record.regionCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_base_company
+    set PKID = #{record.pkid,jdbcType=INTEGER},
+      COMPANY_CODE = #{record.companyCode,jdbcType=VARCHAR},
+      COMPANY_NAME = #{record.companyName,jdbcType=VARCHAR},
+      COMPANY_ADDRESS = #{record.companyAddress,jdbcType=VARCHAR},
+      FIRST_MANAGER_NAME = #{record.firstManagerName,jdbcType=VARCHAR},
+      CERTIFICATE_CODE = #{record.certificateCode,jdbcType=VARCHAR},
+      FIRST_MANAGER_TELEPHONE = #{record.firstManagerTelephone,jdbcType=VARCHAR},
+      GROUP_CODE = #{record.groupCode,jdbcType=VARCHAR},
+      REGION_CODE = #{record.regionCode,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shiningcity.company.pojo.BaseCompany">
+    update tb_base_company
+    <set>
+      <if test="companyCode != null">
+        COMPANY_CODE = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        COMPANY_ADDRESS = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="firstManagerName != null">
+        FIRST_MANAGER_NAME = #{firstManagerName,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateCode != null">
+        CERTIFICATE_CODE = #{certificateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstManagerTelephone != null">
+        FIRST_MANAGER_TELEPHONE = #{firstManagerTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="groupCode != null">
+        GROUP_CODE = #{groupCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shiningcity.company.pojo.BaseCompany">
+    update tb_base_company
+    set COMPANY_CODE = #{companyCode,jdbcType=VARCHAR},
+      COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+      COMPANY_ADDRESS = #{companyAddress,jdbcType=VARCHAR},
+      FIRST_MANAGER_NAME = #{firstManagerName,jdbcType=VARCHAR},
+      CERTIFICATE_CODE = #{certificateCode,jdbcType=VARCHAR},
+      FIRST_MANAGER_TELEPHONE = #{firstManagerTelephone,jdbcType=VARCHAR},
+      GROUP_CODE = #{groupCode,jdbcType=VARCHAR},
+      REGION_CODE = #{regionCode,jdbcType=VARCHAR}
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 调用存储过程 -->
+  <!-- 返回结果会放在参数map中 -->
+  <insert id="insertProcedure" parameterType="map" statementType="CALLABLE">
+    {call insert_com_by_code_name(#{pkid,mode=OUT,jdbcType=INTEGER},#{companyCode,mode=IN,jdbcType=VARCHAR},#{companyName,mode=IN,jdbcType=VARCHAR})}
+  </insert>
+  <!--  -->
+  <delete id="deleteByPrimaryKeyProcedure" parameterType="java.lang.Integer" statementType="CALLABLE">
+    {call delete_com_by_id(#{pkid,mode=IN,jdbcType=INTEGER})}
+  </delete>
+  <!-- 
+  <delete id="deleteByPrimaryKeyProcedure" parameterType="java.lang.Integer">
+    delete from tb_base_company
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </delete> -->
+  <!--  -->
+  <select id="selectByIdProcedure" parameterType="java.lang.Integer" resultMap="BaseResultMap" statementType="CALLABLE">
+    {call select_com_by_id(#{pkid,mode=IN,jdbcType=INTEGER})}
+  </select>
+  <!-- 
+  <select id="selectByIdProcedure" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_base_company
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </select> -->
+  
+  <!-- 调用存储函数，返回结果会放在参数map中，也可以使用List或实体类来接受结果。 -->
+  <!-- parameterType="java.util.Map" -->
+  <select id="selectAddIntProcedure" parameterType="map" statementType="CALLABLE">
+    {#{resultNum,mode=OUT,jdbcType=INTEGER}=call add_int_param(#{num1,mode=IN,jdbcType=INTEGER},#{num2,mode=IN,jdbcType=INTEGER})}
+  </select> <!-- mode=OUT、IN、INOUT，其中IN可以省略jdbcType -->
+  <select id="selectAddDecimalProcedure" parameterType="map" statementType="CALLABLE">
+    {#{resultNum,mode=OUT,jdbcType=DECIMAL}=call add_decimal_param(#{num1,mode=IN,jdbcType=DECIMAL},#{num2,mode=IN,jdbcType=DECIMAL})}
+  </select>	<!-- 不要写成jdbcType=DECIMAL(10,2) -->
+  
+  <!-- parameterType="java.util.Map" -->
+  <select id="selectComDetailListByMap" parameterType="map" resultMap="CompanyAndGroupAndManager">
+    select distinct
+    c.*,g.PKID GROUP_PKID,g.GROUP_NAME,r.PKID REGION_PKID,r.REGION_NAME,m.PKID MANAGER_PKID,m.MANAGER_CODE,m.MANAGER_NAME,m.BIRTHDAY,m.ID_CARD_CODE,m.SEX,m.POST,m.TELEPHONE
+	from tb_base_company c
+	LEFT JOIN tb_base_group g on g.GROUP_CODE = c.GROUP_CODE
+	LEFT JOIN tb_base_region r on r.REGION_CODE = c.REGION_CODE
+	LEFT JOIN tb_base_manager m on m.COMPANY_CODE = c.COMPANY_CODE
+    WHERE 1=1
+    <if test="companyCode != null">
+	and c.COMPANY_CODE = #{companyCode,jdbcType=VARCHAR}
+	</if>
+    <if test="groupCode != null">
+	and c.GROUP_CODE = #{groupCode,jdbcType=VARCHAR}
+	</if>
+    <if test="certificateCode != null">
+	and c.CERTIFICATE_CODE = #{certificateCode,jdbcType=VARCHAR}
+	</if>
+    <if test="regionCode != null">
+	and c.REGION_CODE = #{regionCode,jdbcType=VARCHAR}
+	</if>
+    <if test="firstManagerTelephone != null">
+	and c.FIRST_MANAGER_TELEPHONE = #{firstManagerTelephone,jdbcType=VARCHAR}
+	</if>
+    <if test="companyName != null">
+	and INSTR(c.COMPANY_NAME, #{companyName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="companyAddress != null">
+	and INSTR(c.COMPANY_ADDRESS, #{companyAddress,jdbcType=VARCHAR})>0
+	</if>
+    <if test="firstManagerName != null">
+	and INSTR(c.FIRST_MANAGER_NAME, #{firstManagerName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="regionName != null">
+	and INSTR(r.REGION_NAME, #{regionName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="groupName != null">
+	and INSTR(g.GROUP_NAME, #{groupName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="managerName != null">
+	and INSTR(m.MANAGER_NAME, #{managerName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="regionName != null">
+	and INSTR(r.REGION_NAME, #{regionName,jdbcType=VARCHAR})>0
+	</if>
+	<if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectComManMapListByMap" parameterType="map" resultType="java.util.HashMap">
+    select distinct
+    c.*,g.PKID GROUP_PKID,g.GROUP_NAME,r.PKID REGION_PKID,r.REGION_NAME,m.PKID MANAGER_PKID,m.MANAGER_CODE,m.MANAGER_NAME,m.BIRTHDAY,m.ID_CARD_CODE,m.SEX,m.POST,m.TELEPHONE
+	from tb_base_company c
+	LEFT JOIN tb_base_group g on g.GROUP_CODE = c.GROUP_CODE
+	LEFT JOIN tb_base_region r on r.REGION_CODE = c.REGION_CODE
+	LEFT JOIN tb_base_manager m on m.COMPANY_CODE = c.COMPANY_CODE
+    WHERE 1=1
+    <if test="companyCode != null">
+	and c.COMPANY_CODE = #{companyCode,jdbcType=VARCHAR}
+	</if>
+    <if test="groupCode != null">
+	and c.GROUP_CODE = #{groupCode,jdbcType=VARCHAR}
+	</if>
+    <if test="certificateCode != null">
+	and c.CERTIFICATE_CODE = #{certificateCode,jdbcType=VARCHAR}
+	</if>
+    <if test="regionCode != null">
+	and c.REGION_CODE = #{regionCode,jdbcType=VARCHAR}
+	</if>
+    <if test="firstManagerTelephone != null">
+	and c.FIRST_MANAGER_TELEPHONE = #{firstManagerTelephone,jdbcType=VARCHAR}
+	</if>
+    <if test="companyName != null">
+	and INSTR(c.COMPANY_NAME, #{companyName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="companyAddress != null">
+	and INSTR(c.COMPANY_ADDRESS, #{companyAddress,jdbcType=VARCHAR})>0
+	</if>
+    <if test="firstManagerName != null">
+	and INSTR(c.FIRST_MANAGER_NAME, #{firstManagerName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="regionName != null">
+	and INSTR(r.REGION_NAME, #{regionName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="groupName != null">
+	and INSTR(g.GROUP_NAME, #{groupName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="managerName != null">
+	and INSTR(m.MANAGER_NAME, #{managerName,jdbcType=VARCHAR})>0
+	</if>
+    <if test="regionName != null">
+	and INSTR(r.REGION_NAME, #{regionName,jdbcType=VARCHAR})>0
+	</if>
+	<if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <!-- 
+我存储过程里想实现多个传入参数的判断,里面有7个传入参数条件.
+CREATE PROCEDURE sp_tbWasteSource_Search
+(
+    @sd   datetime,           //开始日期
+    @ed   datetime,           //结束日期
+    @con1 varchar(50),        
+    @con2 varchar(30),        
+    @con3 varchar(5),        
+    @con4  varchar(10),       
+    @con5 varchar(4)         
+)
+AS
+declare @sql varchar(1000)
+begin
+  set @sql='SELECT * FROM table '
+  if  @sd!='' and @ed!=''
+    begin
+      set @sql=@sql+' where CosID= '+cast(@CosID as varchar)
+    end
+  if (@CosName!= '' and @CosID!='')
+    begin
+      set @sql=@sql+'and'+'  CosName=  '+cast (@CosName as varchar )
+    end
+  else 
+    if (@CosName!='' and @CosID ='')
+      begin
+        set @sql=@sql+'where '+'  CosName=  '+cast (@CosName as varchar )
+      end
+  if @CosCredit!= '' and (@CosID!='' or @CosName!='')
+    begin
+      set @sql=@sql+' and  CosCredit=  '+cast (@CosCredit as varchar )
+    end
+  else 
+    if @CosCredit!='' and @CosID=''and @CosName=''
+      set @sql=@sql+'where CosCredit= '+cast (@CosCredit as varchar )
+  exec (@sql)
+end
+GO
+   -->
+</mapper>

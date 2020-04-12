@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+	<!-- 扫描service的bean包 -->
+	<context:component-scan base-package="com.shiningcity.*.service"/>
+	<!-- 扫描@component的bean包 -->
+	<context:component-scan base-package="com.shiningcity.*.util"/>
+	
+	<!-- 线程池 -->
+	<bean id="threadPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数 -->     
+        <property name="corePoolSize" value="8" />
+        <!-- 最大线程数 -->  
+        <property name="maxPoolSize" value="8" />
+        <!-- 队列最大长度 -->
+        <property name="queueCapacity" value="512" />
+        <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+        <property name="keepAliveSeconds" value="60" />
+        <!-- 线程池对拒绝任务(无线程可用)的处理策略 -->  
+        <property name="rejectedExecutionHandler">  
+          <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />  
+        </property>
+        <!-- 线程名称前缀 -->
+        <property name="threadNamePrefix" value="threadPoolA-"></property>
+        <!-- 允许核心线程超时，默认false -->
+        <property name="allowCoreThreadTimeOut" value="false"></property>
+        <!-- 调度器shutdown被调用时等待当前被调度的任务完成 -->
+        <property name="waitForTasksToCompleteOnShutdown" value="true"></property>
+        <!-- 等待时长 -->
+        <property name="awaitTerminationSeconds" value="60"></property>
+    </bean>
+    <!-- 注解式 -->
+    <task:annotation-driven />
+	
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 配置数据源 -->
+		<property name="dataSource" ref="dataSource"/> 
+	</bean>
+	
+	<!-- 配置通知 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 配置传播特性，传播特性的方法名是针对service层的。
+			配置了传播特性就不需要在方法上加注解了，对于没有配置传播特性的方法，要在controller方法上加注解
+			@Transactional(rollbackFor=Exception.class) -->
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="select*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置aop -->
+	<aop:config>
+		<aop:advisor advice-ref="txAdvice"
+			pointcut="execution(* com.shiningcity.*.service.*.*(..))" />
+	</aop:config>
+	
+</beans>

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiningcity.company.mapper.BaseRegionMapper">
+  <resultMap id="BaseResultMap" type="com.shiningcity.company.pojo.BaseRegion">
+    <id column="PKID" jdbcType="INTEGER" property="pkid" />
+    <result column="REGION_CODE" jdbcType="VARCHAR" property="regionCode" />
+    <result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+    <result column="SHORT_NAME" jdbcType="VARCHAR" property="shortName" />
+    <result column="PARENT_CODE" jdbcType="VARCHAR" property="parentCode" />
+    <result column="REGION_LEVEL" jdbcType="INTEGER" property="regionLevel" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+    <!-- 向下递归查询映射结果 -->
+    <resultMap id="forEacheResultMapDown" type="com.shiningcity.company.pojo.BaseRegion">
+        <id column="PKID" property="pkid" />
+        <result column="REGION_CODE" property="regionCode" />
+        <result column="REGION_NAME" property="regionName" />
+        <result column="SHORT_NAME" property="shortName" />
+        <result column="PARENT_CODE" property="parentCode" />
+        <result column="REGION_LEVEL" property="regionLevel" />
+        <result column="STATUS" property="status" />
+        <result column="REMARKS" property="remarks" />
+        <collection property="childList" 
+            ofType="com.shiningcity.company.pojo.BaseRegion" 
+            select="com.shiningcity.company.mapper.BaseRegionMapper.selectRegionListHaveChild2"
+            column="REGION_CODE">
+        </collection>
+    </resultMap>
+    <!-- 向上递归查询映射结果 -->
+    <resultMap id="forEacheResultMapUp" type="com.shiningcity.company.pojo.BaseRegion">
+        <id column="PKID" property="pkid" />
+        <result column="REGION_CODE" property="regionCode" />
+        <result column="REGION_NAME" property="regionName" />
+        <result column="SHORT_NAME" property="shortName" />
+        <result column="PARENT_CODE" property="parentCode" />
+        <result column="REGION_LEVEL" property="regionLevel" />
+        <result column="STATUS" property="status" />
+        <result column="REMARKS" property="remarks" />
+        <association property="parentInfo"
+            javaType="com.shiningcity.company.pojo.BaseRegion"
+            select="com.shiningcity.company.mapper.BaseRegionMapper.selectRegionListHaveParent"
+            column="PARENT_CODE">
+        </association>
+    </resultMap>
+    
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    PKID, REGION_CODE, REGION_NAME, SHORT_NAME, PARENT_CODE, REGION_LEVEL, STATUS, REMARKS
+  </sql>
+  <select id="selectByExample" parameterType="com.shiningcity.company.pojo.BaseRegionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_base_region
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_base_region
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_base_region
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.shiningcity.company.pojo.BaseRegionExample">
+    delete from tb_base_region
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.shiningcity.company.pojo.BaseRegion">
+    <selectKey keyProperty="pkid" order="AFTER" resultType="java.lang.Integer">
+        select LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_base_region (PKID, REGION_CODE, REGION_NAME, 
+      SHORT_NAME, PARENT_CODE, REGION_LEVEL, 
+      STATUS, REMARKS)
+    values (#{pkid,jdbcType=INTEGER}, #{regionCode,jdbcType=VARCHAR}, #{regionName,jdbcType=VARCHAR}, 
+      #{shortName,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, #{regionLevel,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shiningcity.company.pojo.BaseRegion">
+    <selectKey keyProperty="pkid" order="AFTER" resultType="java.lang.Integer">
+        select LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_base_region
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pkid != null">
+        PKID,
+      </if>
+      <if test="regionCode != null">
+        REGION_CODE,
+      </if>
+      <if test="regionName != null">
+        REGION_NAME,
+      </if>
+      <if test="shortName != null">
+        SHORT_NAME,
+      </if>
+      <if test="parentCode != null">
+        PARENT_CODE,
+      </if>
+      <if test="regionLevel != null">
+        REGION_LEVEL,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="remarks != null">
+        REMARKS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pkid != null">
+        #{pkid,jdbcType=INTEGER},
+      </if>
+      <if test="regionCode != null">
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null">
+        #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null">
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null">
+        #{parentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionLevel != null">
+        #{regionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.shiningcity.company.pojo.BaseRegionExample" resultType="java.lang.Long">
+    select count(*) from tb_base_region
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_base_region
+    <set>
+      <if test="record.pkid != null">
+        PKID = #{record.pkid,jdbcType=INTEGER},
+      </if>
+      <if test="record.regionCode != null">
+        REGION_CODE = #{record.regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionName != null">
+        REGION_NAME = #{record.regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shortName != null">
+        SHORT_NAME = #{record.shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentCode != null">
+        PARENT_CODE = #{record.parentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.regionLevel != null">
+        REGION_LEVEL = #{record.regionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        STATUS = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null">
+        REMARKS = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_base_region
+    set PKID = #{record.pkid,jdbcType=INTEGER},
+      REGION_CODE = #{record.regionCode,jdbcType=VARCHAR},
+      REGION_NAME = #{record.regionName,jdbcType=VARCHAR},
+      SHORT_NAME = #{record.shortName,jdbcType=VARCHAR},
+      PARENT_CODE = #{record.parentCode,jdbcType=VARCHAR},
+      REGION_LEVEL = #{record.regionLevel,jdbcType=INTEGER},
+      STATUS = #{record.status,jdbcType=VARCHAR},
+      REMARKS = #{record.remarks,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shiningcity.company.pojo.BaseRegion">
+    update tb_base_region
+    <set>
+      <if test="regionCode != null">
+        REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null">
+        REGION_NAME = #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="shortName != null">
+        SHORT_NAME = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null">
+        PARENT_CODE = #{parentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionLevel != null">
+        REGION_LEVEL = #{regionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shiningcity.company.pojo.BaseRegion">
+    update tb_base_region
+    set REGION_CODE = #{regionCode,jdbcType=VARCHAR},
+      REGION_NAME = #{regionName,jdbcType=VARCHAR},
+      SHORT_NAME = #{shortName,jdbcType=VARCHAR},
+      PARENT_CODE = #{parentCode,jdbcType=VARCHAR},
+      REGION_LEVEL = #{regionLevel,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      REMARKS = #{remarks,jdbcType=VARCHAR}
+    where PKID = #{pkid,jdbcType=INTEGER}
+  </update>
+  
+    <!--  -->
+    <select id="selectInfo1Test" parameterType="com.shiningcity.company.pojo.BaseRegion" resultMap="BaseResultMap">
+        select * from tb_base_region WHERE REGION_NAME = #{region.regionName} AND PKID > #{mixId};
+    </select>
+    <!--  -->
+    <select id="selectInfo2Test" resultMap="BaseResultMap">
+        select * from tb_base_region WHERE REGION_NAME = #{regionName} AND PKID > #{mixId};
+    </select>
+    
+    <!-- 递归查询（向下查询） -->
+    <select id="selectRegionListDownProcedure" resultMap="BaseResultMap" statementType="CALLABLE">
+        select * from tb_base_region WHERE FIND_IN_SET(region_code,getRegionCodeListForDown(#{upCode}));
+    </select>
+    
+    <!-- 递归查询（向上查询） -->
+    <select id="selectRegionListUpProcedure" resultMap="BaseResultMap" statementType="CALLABLE">
+        select * from tb_base_region WHERE FIND_IN_SET(region_code,getRegionCodeListForUp(#{downCode}));
+    </select>
+    
+    <!-- 带层级关系的递归查询（向下查询） -->
+    <select id="selectRegionListHaveChild1" resultMap="forEacheResultMapDown">
+        select * from tb_base_region WHERE REGION_CODE = #{regionCode};
+    </select>
+    <select id="selectRegionListHaveChild2" resultMap="forEacheResultMapDown">
+        select * from tb_base_region WHERE PARENT_CODE = #{regionCode};
+    </select>
+    
+    <!-- 带层级关系的递归查询（向上查询） -->
+    <select id="selectRegionListHaveParent" resultMap="forEacheResultMapUp">
+        select * from tb_base_region WHERE REGION_CODE = #{regionCode};
+    </select>
+    
+  
+</mapper>

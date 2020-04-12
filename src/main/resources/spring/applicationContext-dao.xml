@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+		
+	<!-- 加载java配置文件 -->
+	<context:property-placeholder location="classpath:common.properties"/>
+	
+	<!-- 数据源配置,使用应用内的c3p0数据库连接池 
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  
+        <property name="driverClass" value="${jdbc.driverClassName}"/>  
+        <property name="jdbcUrl" value="${jdbc.url}"/>  
+        <property name="user" value="${jdbc.username}"/>  
+        <property name="password" value="${jdbc.password}"/>  
+        <property name="initialPoolSize" value="5"/>  
+        <property name="minPoolSize" value="5"/>  
+        <property name="maxPoolSize" value="100"/>  
+        <property name="checkoutTimeout" value="5000"/>  
+        <property name="maxIdleTime" value="1800"/>  
+        <property name="idleConnectionTestPeriod" value="3000"/>  
+        <property name="acquireIncrement" value="3"/>  
+    </bean>  
+     -->
+	
+	<!-- 配置数据源，dbcp连接池	jar:commons-dbcp  
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  
+	    destroy-method="close">  
+	    <property name="driverClassName" value="${db.driver}" />  
+	    <property name="url" value="${db.url}" />  
+	    <property name="username" value="${db.username}" />  
+	    <property name="password" value="${db.password}" />  
+	    连接初始值，连接池启动时创建的连接数量的初始值  默认值是0
+	    <property name="initialSize" value="3" />  
+	    最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请  默认值是0
+	    <property name="minIdle" value="3" />  
+	    最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 ，0时无限制  默认值是8
+	    <property name="maxIdle" value="10" />  
+	    连接池的最大值，同一时间可以从池分配的最多连接数量，0时无限制   默认值是8
+	    <property name="maxActive" value="30" />  
+	    <property name="validationQuery" value="SELECT 1" />  
+	    <property name="testOnBorrow" value="true"/>  
+	</bean>  
+	 -->
+	<!-- 配置数据源，dbcp2连接池	jar:commons-dbcp2
+	报错：Unsupported major.minor version 51.0，dbcp2版本不支持jdk1.6
+	报错：Unsupported major.minor version 52.0，dbcp2版本不支持jdk1.7
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${db.driver}"></property>
+		<property name="username" value="${db.username}"></property>
+		<property name="password" value="${db.password}"></property>
+		<property name="url" value="${db.url}"></property>
+		<property name="maxTotal" value="30"></property>
+		<property name="maxIdle" value="10"></property>
+	连接初始值，连接池启动时创建的连接数量的初始值  默认值是0
+	    <property name="initialSize" value="3" />  
+	    最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请  默认值是0
+	    <property name="minIdle" value="3" />  
+	    最大空闲值.当经过一个高峰时间后，连接池可以慢慢将已经用不到的连接慢慢释放一部分，一直减少到maxIdle为止 ，0时无限制  默认值是8
+	    <property name="maxIdle" value="10" />  
+	    连接池的最大值，同一时间可以从池分配的最多连接数量，0时无限制   默认值是8
+	    <property name="maxTotal" value="30" />  
+	</bean>
+	 -->
+	<!-- 配置数据源,druid数据库连接池    jar:druid -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="url" value="${db.url}" />
+		<property name="maxActive" value="30" />
+		<!-- <property name="MinIdle" value="10" /> -->
+		<property name="maxWait" value="60000"></property>
+		<!-- 
+		<property name="filters" value="stat" />  
+		<property name="initialSize" value="1" />  
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />  
+		<property name="minEvictableIdleTimeMillis" value="300000" />  
+		<property name="validationQuery" value="SELECT 'x'" />  
+		<property name="testWhileIdle" value="true" />  
+		<property name="testOnBorrow" value="false" />  
+		<property name="testOnReturn" value="false" />  
+		<property name="poolPreparedStatements" value="true" />  
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> 
+		 -->
+	</bean>
+	
+	<!--sqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- mybatis的全局配置文件路径 -->
+		<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml" />
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!--批量扫描mapper接口的包  MapperScannerConfigure-->
+	<!-- 需要为mapper生产代理类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.shiningcity.*.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+</beans>

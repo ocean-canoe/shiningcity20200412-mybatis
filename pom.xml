@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.shiningcity</groupId>
+    <artifactId>shiningcity200412-mybatis</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <!-- 设置源代码编码方式为UTF-8 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>4.12</junit.version>
+        <spring.version>4.3.22.RELEASE</spring.version>
+        <mybatis.version>3.4.6</mybatis.version>
+        <mybatis.spring.version>1.3.2</mybatis.spring.version>
+        <mybatis.ehcache.version>1.1.0</mybatis.ehcache.version>
+        <mybatis.paginator.version>1.2.17</mybatis.paginator.version>
+        <mysql.version>5.1.38</mysql.version>
+        <mapper.version>4.1.2</mapper.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <fastjson.version>1.2.56</fastjson.version>
+        <jackson.version>2.9.8</jackson.version>
+        <druid.version>1.1.12</druid.version>
+        <httpclient.version>4.5.6</httpclient.version>
+        <jstl.version>1.2</jstl.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <javax.servlet.jsp-api.version>2.3.3</javax.servlet.jsp-api.version>
+        <joda-time.version>2.10.1</joda-time.version>
+        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <commons-io.version>2.6</commons-io.version>
+        <commons-net.version>3.6</commons-net.version>
+        <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+        <commons-pool2.version>2.4.3</commons-pool2.version>
+        <pagehelper.version>5.1.8</pagehelper.version>
+        <jsqlparser.version>1.3</jsqlparser.version>
+        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <jedis.version>3.0.1</jedis.version>
+        <spring-data-redis.version>2.1.4.RELEASE</spring-data-redis.version>
+        <solrj.version>7.6.0</solrj.version>
+        <activemq.version>5.15.8</activemq.version>
+        <freemarker.version>2.3.28</freemarker.version>
+        <poi.version>4.0.1</poi.version>
+        <easypoi.version>4.0.0</easypoi.version>
+        <file-management.version>3.0.0</file-management.version>
+        <asm.version>3.3.1</asm.version>
+        <cglib.version>3.1</cglib.version>
+        <aspectjweaver.version>1.9.2</aspectjweaver.version>
+        <aopalliance.version>1.0</aopalliance.version>
+        <dubbo.version>2.6.0</dubbo.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
+        <zkclient.version>0.10</zkclient.version>
+        <cxf.version>3.1.18</cxf.version>   <!-- 3.2需要引入的依赖比较多，暂时不研究 -->
+    </properties>
+
+    <!-- 添加依赖 -->
+    <dependencies>
+        <!-- junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons-net.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons-pool2.version}</version>
+        </dependency>
+        <!-- druid连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+
+        <!-- mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis.spring.version}</version>
+        </dependency>
+        <!-- 使用二级缓存，需要在mapper.xml中配置cache标签 -->
+        <dependency>
+            <groupId>org.mybatis.caches</groupId>
+            <artifactId>mybatis-ehcache</artifactId>
+            <version>${mybatis.ehcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.miemiedev</groupId>
+            <artifactId>mybatis-paginator</artifactId>
+            <version>${mybatis.paginator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>${mapper.version}</version>
+        </dependency>
+
+        <!-- Spring dependencies-->
+        <!-- spring-context依赖可以下载spring-context、spring-aop、spring-beans、spring-core、spring-jcl、spring-ecpression -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- 文件上传 -->
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>file-management</artifactId>
+            <version>${file-management.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
+        <!-- JSP标准标签库 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>${javax.servlet.jsp-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- poi -->
+        <!-- <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency> -->
+        <!-- easypoi -->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+            <version>${easypoi.version}</version>
+        </dependency>
+
+        <!-- 配置redis data 和client jar-->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-data-redis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+        <!-- 这个不能用，缺少文件
+        <dependency>
+          <groupId>javax.mail</groupId>
+          <artifactId>javax.mail-api</artifactId>
+          <version>1.6.2</version>
+      </dependency> -->
+
+        <!-- 此依赖包含javax.mail、activation两个jar包 -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <!-- 此依赖包含commons-email、javax.mail、activation三个jar包，但是javax.mail版本较低 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.5</version>
+            <!-- <exclusions>
+                <exclusion>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions> -->
+        </dependency>
+
+    </dependencies>
+
+    <!-- tomcat8插件 -->
+    <!--   <pluginRepositories>
+        <pluginRepository>
+            <id>tomcat8-plugin</id>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/public/</url>
+        </pluginRepository>
+      </pluginRepositories> -->
+    <!-- 不推荐使用tomcat8插件，如果tomcat7版本低的话可以使用servers中的tomcat -->
+
+    <build>
+        <plugins>
+
+            <!-- 指定maven编译的jdk版本,如果不指定,maven3默认用jdk 1.5 maven2默认用jdk1.3 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>	<!-- 源代码使用的JDK版本 -->
+                    <target>1.8</target>	<!-- 需要生成的目标class文件的编译版本 -->
+                    <encoding>UTF-8</encoding><!-- 字符集编码 -->
+                    <!-- <skipTests>true</skipTests>跳过测试
+                    <verbose>true</verbose>
+                    <showWarnings>true</showWarnings>    -->
+                    <!-- <fork>true</fork>要使compilerVersion标签生效，还需要将fork设为true，用于明确表示编译版本配置的可用 -->
+                    <!-- <executable></executable>使用指定的javac命令，例如：<executable>${JAVA_1_4_HOME}/bin/javac</executable> -->
+                    <!-- <compilerVersion>1.3</compilerVersion>指定插件将使用的编译器的版本 -->
+                    <!-- <meminitial>128m</meminitial>编译器使用的初始内存 -->
+                    <!-- <maxmem>512m</maxmem>编译器使用的最大内存 -->
+                    <!-- <compilerArgument>-verbose -bootclasspath ${java.home}\lib\rt.jar</compilerArgument>这个选项用来传递编译器自身不包含但是却支持的参数选项 -->
+                </configuration>
+            </plugin>
+            <!-- tomcat7 -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <!-- 端口号只针对eclipse启动项目使用，部署到tomcat后使用tomcat的端口号 -->
+                    <port>8082</port>
+                    <!-- 项目路径，热部署的话会去找相应的文件夹
+                    热部署tomcat的地址和端口，manager/text是固定的 -->
+                    <path>/shiningcity190201-maven-mybatis</path>
+                    <url>http://127.0.0.1:8080/manager/text</url>
+                    <username>tomcat</username>
+                    <password>tomcat</password>
+                    <!-- 部署指令：tomcat7:deploy
+                    热部署指令：clean tomcat7:redeploy -->
+                </configuration>
+            </plugin>
+            <!-- 配置Tomcat8插件 -->
+            <!-- 使用tomcat8插件要注意：jdk安装目录文件夹不能有空格，否则tomcat8会把空格转译成%20，然后导致jdk路径找不到的问题。
+                    还要注意web.xml中加载配置文件时，不能使用classpath，要使用classpath*，否则无法加载配置文件，但是classpath*又会降低文件的加载效率。 -->
+            <!-- 		<plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat8-maven-plugin</artifactId>
+                        <version>3.0-r1756463</version>
+                        <configuration>
+                            这里配置端口号和访问路径，端口号只针对eclipse启动项目使用，部署到tomcat后使用tomcat的端口号
+                            <port>8082</port>
+                            <path>/shiningcity190201-maven-mybatis</path>
+                            <url>http://127.0.0.1:8080/manager/text</url>
+                            <username>tomcat</username>
+                            <password>tomcat</password>
+                            部署指令：tomcat8:deploy
+                            热部署指令：clean tomcat8:redeploy
+                        </configuration>
+                    </plugin> -->
+        </plugins>
+
+
+        <resources>
+            <!-- 解决dubbo无法将mapper.xml发布的问题 -->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <!-- 由于修改了默认的resource目录，导致src/main/resources的所有文件都不能被扫描，因此还要配多一个
+                 <resource>
+                     <directory>src/main/resources</directory>
+                     <includes>
+                         <include>**/*.properties</include>
+                         <include>**/*.xml</include>
+                     </includes>
+                 </resource> -->
+        </resources>
+    </build>
+
+    <!-- tomcat用户配置 -->
+    <!--
+    <role rolename="manager-gui"/>
+    <role rolename="manager-script"/>
+    <role rolename="manager-jmx"/>
+    <role rolename="manager-status"/>
+    <user username="tomcat" password="tomcat" roles="manager-gui,manager-script"/>
+    <user username="admin" password="admin" roles="manager-gui,manager-script"/>
+     -->
+
+</project>
